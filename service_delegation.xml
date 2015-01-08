@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	
+	<bean id="deviceService" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="target">
+			<bean class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean"> 
+			 		<property name="serviceUrl"><value>http://${address}/antec/remote/DeviceService</value></property>
+					<property name="serviceInterface"><value>com.antec.common.service.DeviceService</value></property>					
+			</bean>
+		</property>
+		<property name="proxyInterfaces"><value>com.antec.common.service.DeviceService</value></property> 			
+	</bean>
+	<bean id="remoteAuthenticationProvider"
+		class="org.springframework.security.authentication.rcp.RemoteAuthenticationProvider">
+		<property name="remoteAuthenticationManager" ref="remoteAuthenticationService" />
+	</bean>
+	
+	<bean id="remoteAuthenticationService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+			<property name="serviceUrl"><value>http://${address}/antec/remote/RemoteAuthenticationService</value></property>
+			<property name="serviceInterface">
+				<value>org.springframework.security.authentication.rcp.RemoteAuthenticationManager</value>
+			</property>			
+	</bean>
+
+	
+</beans>
